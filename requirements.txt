@@ -1,0 +1,23 @@
+# Vietnamese History RAG Chatbot Dependencies
+
+# LangChain for RAG pipeline
+langchain>=0.1.0
+langchain-community>=0.0.10
+langchain-text-splitters>=0.0.1
+langchain-core>=0.1.0
+
+# Vector Store
+chromadb>=0.4.0
+
+# Embeddings
+sentence-transformers>=2.2.2
+langchain-huggingface>=0.0.1
+
+# Ollama for local LLM
+ollama>=0.1.0
+
+# Web Interface  
+gradio>=4.0.0
+
+# Utilities
+python-dotenv>=1.0.0
