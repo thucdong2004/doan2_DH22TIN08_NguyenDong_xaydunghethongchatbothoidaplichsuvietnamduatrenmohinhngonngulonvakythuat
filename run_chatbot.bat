@@ -8,6 +8,6 @@ python init_db.py
 
 echo.
 echo Starting Chatbot...
-python app.py
+streamlit run app.py
 
 pause

@@ -16,8 +16,8 @@ langchain-huggingface>=0.0.1
 # Ollama for local LLM
 ollama>=0.1.0
 
-# Web Interface  
-gradio>=4.0.0
+# Web Interface
+streamlit>=1.30.0
 
 # Utilities
 python-dotenv>=1.0.0

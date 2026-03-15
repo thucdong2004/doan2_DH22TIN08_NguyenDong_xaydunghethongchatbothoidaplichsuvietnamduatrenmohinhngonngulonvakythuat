@@ -46,4 +46,4 @@ pause
 
 echo.
 echo Starting chatbot...
-python app.py
+streamlit run app.py

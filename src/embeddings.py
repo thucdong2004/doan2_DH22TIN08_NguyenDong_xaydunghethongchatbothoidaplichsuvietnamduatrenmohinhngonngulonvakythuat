@@ -13,7 +13,7 @@ def get_embedding_function():
     embedding_function = HuggingFaceEmbeddings(
         model_name=EMBEDDING_MODEL,
         model_kwargs={'device': 'cpu'}, # 'cpu' or 'cuda'
-        encode_kwargs={'normalize_embeddings': False}
+        encode_kwargs={'normalize_embeddings': True}
     )
     return embedding_function
 

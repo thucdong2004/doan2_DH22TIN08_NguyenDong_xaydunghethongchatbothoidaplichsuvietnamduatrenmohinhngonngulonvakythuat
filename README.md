@@ -7,17 +7,23 @@ Hệ thống chatbot hỏi đáp về Lịch sử Việt Nam sử dụng **Retri
 - 📚 Trả lời câu hỏi về lịch sử Việt Nam dựa trên cơ sở tri thức
 - 🔍 Trích xuất thông tin từ tài liệu và trích dẫn nguồn
 - 💻 Chạy hoàn toàn local, không cần API key
-- 🎨 Giao diện Gradio thân thiện và dễ sử dụng
+- 🎨 Giao diện **Streamlit** thân thiện và dễ sử dụng
 
 ## 📋 Yêu cầu hệ thống
 
 1. **Python 3.10 trở lên**
 2. **Ollama** đã cài đặt (tải tại [ollama.com](https://ollama.com))
-3. Khoảng 4GB RAM trở lên
+3. Khoảng **4GB RAM** trở lên
 
 ## 🚀 Cài đặt và chạy
 
-### Bước 1: Cài đặt Ollama và tải model
+### Cách 1: Chạy nhanh bằng file `.bat` (khuyên dùng)
+
+Chỉ cần nhấn đúp vào file `run_chatbot.bat` — sẽ tự động cài thư viện, khởi tạo database và chạy chatbot.
+
+### Cách 2: Chạy thủ công từng bước
+
+#### Bước 1: Cài đặt Ollama và tải model
 
 ```powershell
 # Tải và cài đặt Ollama từ https://ollama.com
@@ -26,55 +32,82 @@ Hệ thống chatbot hỏi đáp về Lịch sử Việt Nam sử dụng **Retri
 ollama pull llama3.2
 ```
 
-### Bước 2: Cài đặt thư viện Python
+#### Bước 2: Cài đặt thư viện Python
 
 ```powershell
-cd d:\test1
 pip install -r requirements.txt
 ```
 
-### Bước 3: Khởi tạo cơ sở dữ liệu
+#### Bước 3: Khởi tạo cơ sở dữ liệu vector (ChromaDB)
 
 ```powershell
 python init_db.py
 ```
 
-### Bước 4: Chạy ứng dụng
+> **Lưu ý:** Lần chạy đầu sẽ tải model embedding (~100MB), có thể mất vài phút.
+
+#### Bước 4: Chạy ứng dụng
 
 ```powershell
-python app.py
+streamlit run app.py
 ```
 
-Hoặc chỉ cần chạy file `run_chatbot.bat` để tự động thực hiện tất cả các bước!
+Trình duyệt sẽ tự động mở tại: **http://localhost:8501**
+
+### Cách 3: Chạy demo đầy đủ (kiểm tra + chatbot)
+
+```powershell
+demo.bat
+```
+
+File `demo.bat` sẽ lần lượt: kiểm tra Ollama → khởi tạo database → chạy test tự động → khởi chạy chatbot.
 
 ## 💡 Sử dụng
 
-1. Truy cập `http://localhost:7860` sau khi chạy `app.py`
-2. Nhập câu hỏi về lịch sử Việt Nam
-3. Hệ thống sẽ tìm kiếm trong cơ sở tri thức và trả lời
+1. Truy cập **http://localhost:8501** sau khi chạy `app.py`
+2. Nhập câu hỏi về lịch sử Việt Nam vào ô chat
+3. Hệ thống sẽ tìm kiếm trong cơ sở tri thức và trả lời kèm nguồn tài liệu
 
 ### Ví dụ câu hỏi:
 
-- "Chiến thắng Điện Biên Phủ diễn ra năm nao?"
+- "Chiến thắng Điện Biên Phủ diễn ra năm nào?"
 - "Ai là người lãnh đạo khởi nghĩa Lam Sơn?"
 - "Kể tên các vua triều Nguyễn"
 - "Võ Nguyên Giáp là ai?"
 
-## 📁 Cấu trúc dữ liệu
+## 📁 Cấu trúc dự án
 
-Tài liệu lịch sử được lưu trong `data/vietnam_history/`:
-- `cac_trieu_dai.txt` - Các triều đại phong kiến VN
-- `khang_chien_chong_phap.txt` - Kháng chiến chống Pháp
-- `khang_chien_chong_my.txt` - Kháng chiến chống Mỹ
-- `lich_su_can_dai.txt` - Lịch sử cận đại và Đổi mới
-- `cac_anh_hung_dan_toc.txt` - Các anh hùng dân tộc
+```
+├── app.py                  # Ứng dụng Streamlit (giao diện chatbot)
+├── config.py               # Cấu hình hệ thống
+├── init_db.py              # Script khởi tạo cơ sở dữ liệu vector
+├── requirements.txt        # Danh sách thư viện Python
+├── run_chatbot.bat          # Script chạy nhanh
+├── demo.bat                # Script demo đầy đủ
+├── src/
+│   ├── document_loader.py  # Tải và xử lý tài liệu
+│   ├── embeddings.py       # Tạo embeddings
+│   ├── vector_store.py     # Quản lý ChromaDB
+│   ├── retriever.py        # Truy xuất tài liệu liên quan
+│   └── llm_chain.py        # Chuỗi xử lý LLM (RAG pipeline)
+├── data/vietnam_history/   # Dữ liệu lịch sử (43 file Markdown)
+│   ├── chronology/         # 15 file theo dòng thời gian (Văn Lang → Đổi Mới)
+│   └── entities/           # 28 file nhân vật & sự kiện lịch sử
+└── chroma_db/              # Cơ sở dữ liệu vector (tự động tạo)
+```
 
 ## 🔧 Cấu hình
 
 Chỉnh sửa file `config.py` để thay đổi:
-- Model Ollama (mặc định: `llama3.2`)
-- Kích thước chunk
-- Số lượng kết quả truy xuất
+
+| Tham số | Mặc định | Mô tả |
+|---|---|---|
+| `OLLAMA_MODEL` | `llama3.2` | Model LLM sử dụng |
+| `EMBEDDING_MODEL` | `paraphrase-multilingual-MiniLM-L12-v2` | Model embedding đa ngôn ngữ |
+| `TOP_K_RESULTS` | `8` | Số tài liệu truy xuất |
+| `CHUNK_SIZE` | `500` | Kích thước chunk tài liệu |
+| `MAX_QUESTIONS_PER_SESSION` | `20` | Giới hạn câu hỏi mỗi phiên |
+| `RATE_LIMIT_SECONDS` | `10` | Thời gian chờ giữa các câu hỏi |
 
 ## ⚠️ Khắc phục sự cố
 
@@ -90,8 +123,12 @@ pip install -r requirements.txt --upgrade
 **Nếu model chạy chậm:**
 - Thử model nhỏ hơn: `ollama pull tinyllama` và sửa `OLLAMA_MODEL` trong `config.py`
 
+**Nếu database bị lỗi:**
+```powershell
+fix_database.bat
+```
+
 ## 📝 Ghi chú
 
-- Lần chạy đầu sẽ tải model embedding (~100MB), có thể mất vài phút
 - Database vector được lưu trong thư mục `chroma_db/`
-- Để cập nhật kiến thức, thêm file `.txt` mới vào `data/vietnam_history/` và chạy lại `init_db.py`
+- Để cập nhật kiến thức, thêm file `.txt` mới vào `data/vietnam_history/` và chạy lại `python init_db.py`
