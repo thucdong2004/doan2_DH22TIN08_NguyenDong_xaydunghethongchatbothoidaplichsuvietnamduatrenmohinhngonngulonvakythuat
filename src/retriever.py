@@ -29,6 +29,14 @@ def retrieve_documents(question):
     # 1. Vector Search
     vector_results = db.similarity_search_with_relevance_scores(question, k=TOP_K_RESULTS)
     
+    # Filter vector results by SIMILARITY_THRESHOLD
+    vector_results = [(doc, score) for doc, score in vector_results if score >= SIMILARITY_THRESHOLD]
+    
+    # If no documents pass the threshold, the question is likely irrelevant
+    if not vector_results:
+        print(f"⚠️ [RETRIEVER] No documents passed SIMILARITY_THRESHOLD ({SIMILARITY_THRESHOLD}). Query is irrelevant.")
+        return []
+    
     # 2. Keyword Search
     bm25 = get_bm25_retriever()
     bm25_docs = bm25.invoke(question)

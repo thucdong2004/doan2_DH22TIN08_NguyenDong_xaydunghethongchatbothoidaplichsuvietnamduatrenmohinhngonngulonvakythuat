@@ -6,7 +6,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from config import DATA_DIR, CHUNK_SIZE, CHUNK_OVERLAP
 
 
-MIN_CHUNK_LENGTH = 80  # Minimum characters for a chunk to be useful
+MIN_CHUNK_LENGTH = 80  
 
 
 def normalize_vietnamese(text):
@@ -18,12 +18,8 @@ def normalize_vietnamese(text):
     """
     text = unicodedata.normalize("NFC", text)
 
-    # Merge markdown headers with the next paragraph so headers are never orphaned.
-    # Pattern: a header line followed by a blank line and then body text
-    # → remove the blank line so the header stays attached to its content.
     text = re.sub(r'(^#{1,3} .+)\n\n(?=\S)', r'\1\n', text, flags=re.MULTILINE)
 
-    # Collapse excessive newlines
     text = re.sub(r'\n{3,}', '\n\n', text)
     text = re.sub(r' {2,}', ' ', text)
     return text.strip()

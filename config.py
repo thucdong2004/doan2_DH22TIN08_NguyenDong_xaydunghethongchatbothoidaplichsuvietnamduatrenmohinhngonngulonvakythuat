@@ -27,7 +27,7 @@ TOP_K_RESULTS = 8  # Number of relevant documents to retrieve
 SIMILARITY_THRESHOLD = 0.2  # Minimum similarity score to include a document
 
 # Rate limiting settings (đồ án - giới hạn tài nguyên)
-MAX_QUESTIONS_PER_SESSION = 20   # Số câu hỏi tối đa mỗi phiên
+MAX_QUESTIONS_PER_SESSION = 10   # Số câu hỏi tối đa mỗi phiên
 RATE_LIMIT_SECONDS = 10          # Thời gian chờ giữa các câu hỏi (giây)
 MAX_CONCURRENT_USERS = 1         # Số người dùng đồng thời tối đa
 
